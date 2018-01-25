@@ -135,25 +135,21 @@ class MLRefreshComponent: UIView {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        // 遇到这些情况就直接返回
         if !isUserInteractionEnabled { return }
-        if object == nil {return}
-        if (scrollView != nil) {
-            if (scrollView?.isEqual(object))! {
-                if keyPath == "contentOffset" {
-                    scrollViewContentOffSetDidChange(change: change)
-                } else if keyPath == "contentSize" {
-                    scrollViewContentSizeDidChange(change: change)
-                }
-            }
+        
+        // 这个就算看不见也需要处理
+        if keyPath == "contentSize" {
+            scrollViewContentSizeDidChange(change: change)
         }
+        
         // 看不见
         if (isHidden) {return}
-        if (pan != nil) {
-            if (pan?.isEqual(object))! {
-                if keyPath == "state" {
-                    scrollViewPanStateDidChange(change: change)
-                }
-            }
+        
+        if keyPath == "contentOffset" {
+            scrollViewContentOffSetDidChange(change: change)
+        } else if keyPath == "state" {
+            scrollViewPanStateDidChange(change: change)
         }
     }
     
